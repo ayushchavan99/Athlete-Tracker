@@ -1,30 +1,25 @@
 # Athlete Tracker
 
-A C-based athlete tracking system designed for athletes and kabaddi players to monitor performance, training consistency, and progress.
+A C-based athlete tracking system designed for athletes and kabaddi players.
 
 ## Features
 
 * Add Daily Entry
 * View All Entries
-* Show Best Sprint Time
+* Show Best Sprint
 * Calculate Discipline Score
 * Show Weight Progress
+* Save Data to File
+* Load Previous Data on Startup
+* Input Validation
 
 ## Data Tracked
 
 * Weight (kg)
-* Protein Goal Completion (Y/N)
-* Workout Completion (Y/N)
-* Practice Completion (Y/N)
+* Protein Goal Completion
+* Workout Completion
+* Practice Completion
 * Sprint Time
-
-## How It Works
-
-The program stores daily athlete records and provides useful insights such as:
-
-* Best Sprint Performance
-* Overall Discipline Percentage
-* Weight Gain/Loss Progress
 
 ## Technologies Used
 
@@ -32,31 +27,28 @@ The program stores daily athlete records and provides useful insights such as:
 * Structures
 * Arrays
 * Functions
-* Menu-Driven Programming
-
-## Project Menu
-
-```text
-===== ATHLETE TRACKER =====
-
-1. Add Daily Entry
-2. View All Entries
-3. Show Best Sprint
-4. Show Discipline %
-5. Show Weight Progress
-6. Exit
-```
+* File Handling
+* Menu Driven Programming
 
 ## Future Improvements
 
-* Input Validation (Y/N only)
-* File Handling for Permanent Storage
+* Edit Entry
+* Delete Entry
+* Weekly Reports
 * Training Streak Tracking
-* Weekly and Monthly Reports
-* Improved Athlete Analytics
+* Better Analytics
 
-## Author
+## Version
 
-Ayush Chavan
+### V1
 
-Diploma Computer Engineering Student | Kabaddi Player
+* Basic Athlete Tracker
+* Best Sprint
+* Discipline Score
+* Weight Progress
+
+### V2
+
+* File Saving (`athlete_data.txt`)
+* Automatic Data Loading
+* Input Validation
