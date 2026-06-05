@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+
+#define MAX_ENTRIES 100
 
 struct daily_entry
 {
@@ -11,61 +11,161 @@ struct daily_entry
     float sprint;
 };
 
-struct daily_entry records[100];
+struct daily_entry records[MAX_ENTRIES];
 int count = 0;
- 
 
-// Function to add a daily entry
-void add_daily_entry() {
-    if (count < 100) {
-        printf("Enter weight:\n");
-        scanf("%f", &records[count].weight);
-        printf("Did you meet your protein goal? (y/n):\n");
-        scanf(" %c", &records[count].protein);
-        printf("Did you do your workout? (y/n):\n");
-        scanf(" %c", &records[count].workout);
-        printf("Did you do your Kabaddi practice? (y/n):\n");
-        scanf(" %c", &records[count].practice);
-        printf("Enter your sprint time(100m):\n");
-        scanf("%f", &records[count].sprint);
-        count++;
-    } else {
-        printf("Maximum entries reached.\n");
-    }
-}
-void view_all_entries(){
-    int i = 0;
-    for(i = 0; i < count; i++) {
-        printf("Entry %d:\n", i + 1);
-        printf("Weight: %.2f\n", records[i].weight);
-        printf("Protein Goal: %c\n", records[i].protein);
-        printf("Workout: %c\n", records[i].workout);
-        printf("Practice: %c\n", records[i].practice);
-        printf("Sprint Time: %.2f\n", records[i].sprint);
-    }
-}
-void show_best_sprint()
- 
+void load_data()
 {
-    if (count==0)
+    FILE *fp = fopen("athlete_data.txt", "r");
+
+    if (fp == NULL)
     {
-        printf("No entries to show.\n"); 
         return;
     }
-    else
+
+    while (count < MAX_ENTRIES &&
+           fscanf(fp, "%f %c %c %c %f",
+                  &records[count].weight,
+                  &records[count].protein,
+                  &records[count].workout,
+                  &records[count].practice,
+                  &records[count].sprint) == 5)
     {
-        float best_sprint=records[0].sprint;
-        int i;
-    for(i = 1; i < count; i++)   
+        count++;
+    }
+
+    fclose(fp);
+}
+
+void add_daily_entry()
+{
+    if (count >= MAX_ENTRIES)
     {
-        if(records[i].sprint < best_sprint)
+        printf("Maximum entries reached.\n");
+        return;
+    }
+
+    do
+    {
+        printf("Enter weight: ");
+        scanf("%f", &records[count].weight);
+
+        if (records[count].weight <= 10 || records[count].weight > 200)
+            printf("Invalid weight. Try again.\n");
+
+    } while (records[count].weight <= 10 || records[count].weight > 200);
+
+    do
+    {
+        printf("Did you meet your protein goal? (y/n): ");
+        scanf(" %c", &records[count].protein);
+
+        if (records[count].protein != 'y' && records[count].protein != 'Y' &&
+            records[count].protein != 'n' && records[count].protein != 'N')
+            printf("Invalid input. Enter y or n only.\n");
+
+    } while (records[count].protein != 'y' && records[count].protein != 'Y' &&
+             records[count].protein != 'n' && records[count].protein != 'N');
+
+    do
+    {
+        printf("Did you do your workout? (y/n): ");
+        scanf(" %c", &records[count].workout);
+
+        if (records[count].workout != 'y' && records[count].workout != 'Y' &&
+            records[count].workout != 'n' && records[count].workout != 'N')
+            printf("Invalid input. Enter y or n only.\n");
+
+    } while (records[count].workout != 'y' && records[count].workout != 'Y' &&
+             records[count].workout != 'n' && records[count].workout != 'N');
+
+    do
+    {
+        printf("Did you do your Kabaddi practice? (y/n): ");
+        scanf(" %c", &records[count].practice);
+
+        if (records[count].practice != 'y' && records[count].practice != 'Y' &&
+            records[count].practice != 'n' && records[count].practice != 'N')
+            printf("Invalid input. Enter y or n only.\n");
+
+    } while (records[count].practice != 'y' && records[count].practice != 'Y' &&
+             records[count].practice != 'n' && records[count].practice != 'N');
+
+    do
+    {
+        printf("Enter your sprint time: ");
+        scanf("%f", &records[count].sprint);
+
+        if (records[count].sprint <= 0 || records[count].sprint > 30)
+            printf("Invalid sprint time. Try again.\n");
+
+    } while (records[count].sprint <= 0 || records[count].sprint > 30);
+
+    FILE *fp = fopen("athlete_data.txt", "a");
+
+    if (fp == NULL)
+    {
+        perror("Error opening file for saving");
+        return;
+    }
+
+    fprintf(fp, "%.2f %c %c %c %.2f\n",
+            records[count].weight,
+            records[count].protein,
+            records[count].workout,
+            records[count].practice,
+            records[count].sprint);
+
+    fclose(fp);
+
+    count++;
+
+    printf("Entry saved successfully.\n");
+}
+
+void view_all_entries()
+{
+    if (count == 0)
+    {
+        printf("No entries found.\n");
+        return;
+    }
+
+    int i;
+
+    for (i = 0; i < count; i++)
+    {
+        printf("\nEntry %d\n", i + 1);
+        printf("Weight      : %.2f kg\n", records[i].weight);
+        printf("Protein     : %c\n", records[i].protein);
+        printf("Workout     : %c\n", records[i].workout);
+        printf("Practice    : %c\n", records[i].practice);
+        printf("Sprint Time : %.2f sec\n", records[i].sprint);
+    }
+}
+
+void show_best_sprint()
+{
+    if (count == 0)
+    {
+        printf("No entries to show.\n");
+        return;
+    }
+
+    float best_sprint = records[0].sprint;
+    int i;
+
+    for (i = 1; i < count; i++)
+    {
+        if (records[i].sprint < best_sprint)
         {
             best_sprint = records[i].sprint;
         }
     }
-    printf("Best Sprint Time: %.2f\n", best_sprint);
-    } 
+
+    printf("Best Sprint Time: %.2f sec\n", best_sprint);
 }
+
 void show_discipline()
 {
     if (count == 0)
@@ -90,10 +190,11 @@ void show_discipline()
             total_score++;
     }
 
-    float percentage = (total_score * 100.0) / max_score;
+    float percentage = (total_score * 100.0f) / max_score;
 
     printf("Discipline Score: %.2f%%\n", percentage);
 }
+
 void show_weight_progress()
 {
     if (count == 0)
@@ -110,11 +211,15 @@ void show_weight_progress()
     printf("Current Weight : %.2f kg\n", current_weight);
     printf("Weight Change  : %.2f kg\n", change);
 }
+
 int main()
 {
-  int choice;
-    do{
+    int choice;
 
+    load_data();
+
+    do
+    {
         printf("\n===== ATHLETE TRACKER =====\n");
         printf("1. Add Daily Entry\n");
         printf("2. View All Entries\n");
@@ -123,41 +228,44 @@ int main()
         printf("5. Show Weight Progress\n");
         printf("6. Exit\n");
 
-        printf("Enter your Choice: ");
-        scanf("%d", &choice);
-    
+        do
+        {
+            printf("Enter your Choice: ");
+            scanf("%d", &choice);
 
-        switch(choice) {
+            if (choice < 1 || choice > 6)
+                printf("Invalid choice. Enter 1 to 6 only.\n");
+
+        } while (choice < 1 || choice > 6);
+
+        switch (choice)
+        {
         case 1:
-        printf("Add Daily Entry\n");
-        add_daily_entry(); // Code to add daily entry
+            add_daily_entry();
             break;
-        case 2:
-        printf("View All Entries\n");
-        view_all_entries(); // Code to view all entries
-            break;              
-        case 3:
-        printf("Show Best Sprint\n");
-        show_best_sprint(); // Code to show best sprint
-            break;
-        case 4:
-        printf("Show Discipline \n");
-            show_discipline(); // Code to show discipline percentage
-            break;
-        case 5:
-        printf("Show Weight Progress\n");
-            show_weight_progress(); // Code to show weight progress
-            break;
-        case 6:
-        printf("Exiting...\n");
-            break;
-        default:
-        printf("Invalid Choice. Please try again.\n");   
-        }
-    }
 
-    while(choice != 6);
+        case 2:
+            view_all_entries();
+            break;
+
+        case 3:
+            show_best_sprint();
+            break;
+
+        case 4:
+            show_discipline();
+            break;
+
+        case 5:
+            show_weight_progress();
+            break;
+
+        case 6:
+            printf("Exiting...\n");
+            break;
+        }
+
+    } while (choice != 6);
+
     return 0;
 }
-
-   
