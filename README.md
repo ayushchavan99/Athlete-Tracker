@@ -4,17 +4,31 @@ A C-based athlete tracking system designed for athletes and kabaddi players.
 
 ## Features
 
+### V1
+
 * Add Daily Entry
 * View All Entries
 * Show Best Sprint
-* Calculate Discipline Score
+* Show Discipline Score
 * Show Weight Progress
-* Save Data to File
-* Load Previous Data on Startup
+
+### V2
+
+* Save Entries to File
+* Load Previous Entries Automatically
 * Input Validation
+* Persistent Data Storage
+
+### V3
+
+* Automatic Date Tracking
+* Automatic Day Tracking
+* Entry History with Date and Day
 
 ## Data Tracked
 
+* Date
+* Day
 * Weight (kg)
 * Protein Goal Completion
 * Workout Completion
@@ -27,28 +41,31 @@ A C-based athlete tracking system designed for athletes and kabaddi players.
 * Structures
 * Arrays
 * Functions
+* Loops
 * File Handling
-* Menu Driven Programming
+* Time Library (`time.h`)
+
+## Sample Entry
+
+Date: 08-06-2026
+Day: Monday
+Weight: 60.00 kg
+Protein: Y
+Workout: Y
+Practice: Y
+Sprint Time: 3.40 sec
 
 ## Future Improvements
 
-* Edit Entry
-* Delete Entry
+* Goal-Based Tracking
+* BMI Calculator
+* Weight Gain / Weight Loss Guidance
 * Weekly Reports
-* Training Streak Tracking
-* Better Analytics
+* Recovery Tracking
+* Training Analytics
 
-## Version
+## Author
 
-### V1
-
-* Basic Athlete Tracker
-* Best Sprint
-* Discipline Score
-* Weight Progress
-
-### V2
-
-* File Saving (`athlete_data.txt`)
-* Automatic Data Loading
-* Input Validation
+Ayush Chavan
+Diploma in Computer Engineering
+Government Polytechnic Pune
