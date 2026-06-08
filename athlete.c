@@ -1,9 +1,13 @@
-#include <stdio.h>
+#include <stdio.h>   // Include stdio.h for input/output functions
+#include <time.h>    // Include time.h for date and time functions
 
-#define MAX_ENTRIES 100
 
-struct daily_entry
-{
+
+#define MAX_ENTRIES 100  // Define maximum number of entries
+
+struct daily_entry   // Define a structure to hold daily entry data
+{   char day[20];
+    char date[20];
     float weight;
     char protein;
     char workout;
@@ -11,10 +15,23 @@ struct daily_entry
     float sprint;
 };
 
-struct daily_entry records[MAX_ENTRIES];
-int count = 0;
+struct daily_entry records[MAX_ENTRIES];  // Array to hold daily entries
+int count = 0;  // Variable to keep track of the number of entries
 
-void load_data()
+void set_date_and_day()     // Function to set the current date and day in the daily entry  
+{
+    time_t now;
+    struct tm *current_time;
+
+    now =time(NULL);
+    current_time = localtime(&now);
+
+    strftime(records[count].date, sizeof(records[count].date), "%d-%m-%y", current_time); 
+    strftime(records[count].day, sizeof(records[count].day), "%A", current_time);
+
+}
+
+void load_data()    // Function to load existing data from file into the records array
 {
     FILE *fp = fopen("athlete_data.txt", "r");
 
@@ -24,12 +41,14 @@ void load_data()
     }
 
     while (count < MAX_ENTRIES &&
-           fscanf(fp, "%f %c %c %c %f",
+           fscanf(fp, "%s %s %f %c %c %c %f",
+                  records[count].date,
+                  records[count].day,
                   &records[count].weight,
                   &records[count].protein,
                   &records[count].workout,
                   &records[count].practice,
-                  &records[count].sprint) == 5)
+                  &records[count].sprint) == 7)
     {
         count++;
     }
@@ -37,13 +56,15 @@ void load_data()
     fclose(fp);
 }
 
-void add_daily_entry()
+void add_daily_entry()   //function to add daily entry with input validation and save to file
 {
     if (count >= MAX_ENTRIES)
     {
         printf("Maximum entries reached.\n");
         return;
     }
+      
+    set_date_and_day();
 
     do
     {
@@ -101,15 +122,17 @@ void add_daily_entry()
 
     } while (records[count].sprint <= 0 || records[count].sprint > 30);
 
-    FILE *fp = fopen("athlete_data.txt", "a");
-
+    FILE *fp = fopen("athlete_data.txt", "a");   //FILE HANDLIMG TO APPEND DATA TO FILE
+  
     if (fp == NULL)
     {
         perror("Error opening file for saving");
         return;
     }
 
-    fprintf(fp, "%.2f %c %c %c %.2f\n",
+    fprintf(fp, "%s %s %.2f %c %c %c %.2f\n",
+            records[count].date,
+            records[count].day,
             records[count].weight,
             records[count].protein,
             records[count].workout,
@@ -123,7 +146,7 @@ void add_daily_entry()
     printf("Entry saved successfully.\n");
 }
 
-void view_all_entries()
+void view_all_entries()    // Function to display all entries in a readable format
 {
     if (count == 0)
     {
@@ -136,6 +159,8 @@ void view_all_entries()
     for (i = 0; i < count; i++)
     {
         printf("\nEntry %d\n", i + 1);
+        printf("DATE: %s\n", records[i].date);
+        printf("DAY: %s\n", records[i].day);
         printf("Weight      : %.2f kg\n", records[i].weight);
         printf("Protein     : %c\n", records[i].protein);
         printf("Workout     : %c\n", records[i].workout);
@@ -144,7 +169,7 @@ void view_all_entries()
     }
 }
 
-void show_best_sprint()
+void show_best_sprint()   // fumction to calculate and display the best sprint time from the records
 {
     if (count == 0)
     {
@@ -166,7 +191,7 @@ void show_best_sprint()
     printf("Best Sprint Time: %.2f sec\n", best_sprint);
 }
 
-void show_discipline()
+void show_discipline()  // Function to calculate and display the discipline score based on protein, workout, and practice records   
 {
     if (count == 0)
     {
@@ -195,7 +220,7 @@ void show_discipline()
     printf("Discipline Score: %.2f%%\n", percentage);
 }
 
-void show_weight_progress()
+void show_weight_progress() // function to calculate and display the weight progress from the first entry to the most recent entry
 {
     if (count == 0)
     {
@@ -212,7 +237,7 @@ void show_weight_progress()
     printf("Weight Change  : %.2f kg\n", change);
 }
 
-int main()
+int main() // main function to display menu and handle user choices for different functionalities of the athlete tracker
 {
     int choice;
 
